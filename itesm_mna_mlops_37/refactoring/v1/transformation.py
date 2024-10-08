@@ -1,6 +1,5 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from preproccesing import preprocces
 from collections import Counter
 import fasttext
 import fasttext.util
@@ -8,6 +7,7 @@ from gensim.models import FastText
 import numpy as np
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
+import os
 
 def obtain_vocabs(df,test_size,random_state):
     random_state = 2
@@ -40,7 +40,12 @@ def obtain_vocabs(df,test_size,random_state):
     return train_vocab,test_vocab,np.array(y_train),np.array(y_test)
 
 def embedd_sentences(vocab):
-    ft_model = fasttext.load_model('cc.en.300.bin')
+    
+    current_dir = os.path.dirname(__file__)
+    
+    model_path = os.path.join(current_dir, '../v1/cc.en.300.bin')
+    
+    ft_model = fasttext.load_model(model_path)
     embedded_sentences = []
 
     for sentence in vocab:
