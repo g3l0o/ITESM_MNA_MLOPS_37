@@ -3,6 +3,8 @@ import pandas as pd
 import re
 from nltk.corpus import stopwords
 import nltk
+from datetime import datetime
+import os
 
 def preprocces(df:pd.DataFrame):
     nltk.download('stopwords')
@@ -39,5 +41,9 @@ def preprocces(df:pd.DataFrame):
 
 
     new_df['words'] = noStopWords
+    time = ''.join(str(datetime.now())[:-7])
+    current_dir = os.path.dirname(__file__)
+    data_path = os.path.join(current_dir, '../../data/processed/')
+    new_df.to_csv(f'{data_path + time}.csv',index=False)
 
     return new_df

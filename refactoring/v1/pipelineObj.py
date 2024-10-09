@@ -11,8 +11,8 @@ class Pipeline():
 
     def transform_data(self,split_percentage=0.20,random_state=2):
         self.train_vocab, self.test_vocab,self.y_train,self.y_test = transformation.obtain_vocabs(self.df,split_percentage,random_state)
-        self.train_embedds = transformation.embedd_sentences(self.train_vocab)
-        self.test_embedds = transformation.embedd_sentences(self.test_vocab)
+        self.train_embedds = transformation.embedd_sentences(self.train_vocab,'train')
+        self.test_embedds = transformation.embedd_sentences(self.test_vocab,'test')
 
     def EDA(self,vocab,classes):
         transformation.wordClouds(vocab,classes)

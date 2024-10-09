@@ -8,6 +8,7 @@ import numpy as np
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import os
+from datetime import  datetime
 
 def obtain_vocabs(df,test_size,random_state):
     random_state = 2
@@ -39,7 +40,7 @@ def obtain_vocabs(df,test_size,random_state):
 
     return train_vocab,test_vocab,np.array(y_train),np.array(y_test)
 
-def embedd_sentences(vocab):
+def embedd_sentences(vocab,dataset):
     
     current_dir = os.path.dirname(__file__)
     
@@ -56,6 +57,11 @@ def embedd_sentences(vocab):
         else:
             embedded_sentences.append(np.zeros(300))
 
+    time = ''.join(str(datetime.now())[:-7])
+    current_dir = os.path.dirname(__file__)
+    data_path = os.path.join(current_dir, '../../data/final/')
+    df = pd.DataFrame(embedded_sentences)
+    df.to_csv(f'{data_path + time}_{dataset}.csv',index=False)
     return np.array(embedded_sentences)
 
 
