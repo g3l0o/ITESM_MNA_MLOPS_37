@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 class Pipeline():
     def load_data(self,path):
-        self.df = data_loader.load_data(path)
+        self.df = data_loader.load_standarize_data(path)
     
     def preprocess_data(self):
         self.df = preproccesing.preprocces(self.df)

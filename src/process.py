@@ -1,20 +1,20 @@
-"""
-This is the demo code that uses hydra to access the parameters in under the directory config.
-
-Author: Khuyen Tran
-"""
-
-import hydra
-from omegaconf import DictConfig
+import pandas as pd
+import sys
 
 
-@hydra.main(config_path="../config", config_name="main", version_base="1.2")
-def process_data(config: DictConfig):
-    """Function to process the data"""
+def load_standarize_data(filepath):
+    df = pd.read_csv(filepath)
+    rename_mapper = {column: column.strip() for column in df.columns}
+    new_df = df.rename(rename_mapper, axis=1)
 
-    print(f"Process data using {config.data.raw}")
-    print(f"Columns used: {config.process.use_columns}")
+    cluster_ids = new_df['Category ID'].unique()
+    label_mapper = {cluster_ids[i]: i for i in range(len(cluster_ids))}
+    new_df['Category ID'] = new_df['Category ID'].map(label_mapper)
+    return new_df
 
 
-if __name__ == "__main__":
-    process_data()
+if __name__ == '__main__':
+    data_path = sys.argv[1]
+    output_file = sys.argv[2]
+    data = load_standarize_data(data_path)
+    data.to_csv(output_file, index=False)
