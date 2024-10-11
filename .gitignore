@@ -96,7 +96,6 @@ target/
 outputs
 
 # Data
-!data/*
 data/final/*
 data/model/*
 data/pre_processed/*
