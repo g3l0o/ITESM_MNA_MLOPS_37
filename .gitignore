@@ -97,7 +97,12 @@ outputs
 
 # Data
 !data/*
-data/*/*
+data/final/*
+data/model/*
+data/pre_processed/*
+data/processed/*
+data/raw/*
+data/transformed/*
 
 # Notebooks
 notebooks/*
