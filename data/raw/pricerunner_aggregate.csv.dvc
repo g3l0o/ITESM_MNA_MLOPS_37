@@ -1,0 +1,5 @@
+outs:
+- md5: 4088854698db833359fe8a4a637727d4
+  size: 3919561
+  hash: md5
+  path: pricerunner_aggregate.csv
