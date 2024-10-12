@@ -2,6 +2,7 @@ from v1 import preproccesing, transformation,data_loader
 from sklearn.metrics import accuracy_score,confusion_matrix,ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 
+
 class Pipeline():
     def load_data(self,path):
         self.df = data_loader.load_standarize_data(path)
