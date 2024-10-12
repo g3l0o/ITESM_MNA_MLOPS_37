@@ -1,17 +1,29 @@
 stages:
   load_data:
-    cmd: \-d data/raw/pricerunner_aggregate.csv \-o data/pre_processed/pricerunner.csv
-      \python src/data_loader.py data/raw/pricerunner_aggregate.csv data/pre_processed/pricerunner.csv
+    cmd: python src/data_loader.py data/raw/pricerunner_aggregate.csv data/pre_processed/p
+    deps:
+    - data/raw/pricerunner_aggregate.csv
+    outs:
+    - data/pre_processed/pricerunner.csv
   preprocess:
-    cmd: \-d data/pre_processed/pricerunner.csv \-o data/processed/pricerunner.csv
-      \python src/processor.py data/pre_processed/pricerunner.csv data/processed/pricerunner.csv
+    cmd: python src/processor.py data/pre_processed/pricerunner.csv data/processed/pricerunner.csv
+    deps:
+    - data/pre_processed/pricerunner.csv
+    outs:
+    - data/processed/pricerunner.csv
   transform:
-    cmd: \-d data/processed/pricerunner.csv \-o data/transformed/pricerunner_train_features.csv
-      \-o data/transformed/pricerunner_test_features.csv \-o data/transformed/pricerunner_train_target.csv
-      \-o data/transformed/pricerunner_test_target.csv \python src/transformer.py
-      data/processed/pricerunner.csv data/transformed/pricerunner_train_features.csv
+    cmd: python src/transformer.py data/processed/pricerunner.csv data/transformed/pricerunner_train_features.csv
       data/transformed/pricerunner_test_features.csv data/transformed/pricerunner_train_target.csv
       data/transformed/pricerunner_test_target.csv
+    deps:
+    - data/processed/pricerunner.csv
+    outs:
+    - data/transformed/pricerunner_test_features.csv
+    - data/transformed/pricerunner_test_target.csv
+    - data/transformed/pricerunner_train_features.csv
+    - data/transformed/pricerunner_train_target.csv
   download_model:
-    cmd: \-o data/model/cc.en.300.bin "\python src/model_downloader.py && mv src/cc.en.300.bin
-      data/model/cc.en.300.bin && rm src/cc.en.300.bin & rm src/cc.en.300.bin.gz"
+    cmd: python src/model_downloader.py && mv src/cc.en.300.bin data/model/cc.en.300.bin
+      && rm src/cc.en.300.bin & rm src/cc.en.300.bin.gz
+    outs:
+    - data/model/cc.en.300.bin
