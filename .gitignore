@@ -96,12 +96,7 @@ target/
 outputs
 
 # Data
-data/final/*
-data/model/*
-data/pre_processed/*
-data/processed/*
-data/raw/*
-data/transformed/*
+data/*
 
 # Notebooks
 notebooks/*
