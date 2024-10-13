@@ -43,3 +43,10 @@ stages:
     - data/transformed/pricerunner_test_features.csv
     outs:
     - data/final/test.csv
+  train_model:
+    cmd: \-d data/final/train.csv \-d data/transformed/pricerunner_train_target.csv
+      \-o data/final/model.pkl \python src/model.py data/final/train.csv data/transformed/pricerunner_train_target.csv
+      data/final/model.pkl
+  evaluate_model:
+    cmd: \-d data/final/model.pkl \-d data/final/test.csv \-d data/transformed/pricerunner_test_target.csv
+      \python src/evaluator.py data/final/model.pkl data/final/test.csv data/transformed/pricerunner_test_target.csv
