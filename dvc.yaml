@@ -27,3 +27,19 @@ stages:
       && rm src/cc.en.300.bin & rm src/cc.en.300.bin.gz
     outs:
     - data/model/cc.en.300.bin
+  embedder_train:
+    cmd: python src/embedder.py data/transformed/pricerunner_train_features.csv data/final/train.csv
+      data/model/cc.en.300.bin
+    deps:
+    - data/model/cc.en.300.bin
+    - data/transformed/pricerunner_train_features.csv
+    outs:
+    - data/final/train.csv
+  embedder_test:
+    cmd: python src/embedder.py data/transformed/pricerunner_train_features.csv data/final/train.csv
+      data/model/cc.en.300.bin
+    deps:
+    - data/model/cc.en.300.bin
+    - data/transformed/pricerunner_test_features.csv
+    outs:
+    - data/final/test.csv
