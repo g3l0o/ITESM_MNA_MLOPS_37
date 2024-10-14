@@ -1,44 +1,59 @@
 # ITESM_MNA_MLOPS_37
 
-## Tools used in this project
-* [hydra](https://hydra.cc/): Manage configuration files - [article](https://mathdatasimplified.com/stop-hard-coding-in-a-data-science-project-use-configuration-files-instead/)
-* [pdoc](https://github.com/pdoc3/pdoc): Automatically create an API documentation for your project
-* [pre-commit plugins](https://pre-commit.com/): Automate code reviewing formatting
+## Miembros del equipo
+* Carlos Mariano Ramírez Amaya 	~> A01795036
+* Rogelio Rivera Meléndez	~> A01166618
+* Felipe Enrique Vázquez Ruiz	~> A01638116
+* Andrea Fernanda Molina Blandón	~> A00827133
+* Jorge Olavarrieta de la Torre	~> A01795487
+* Edgar Gerardo Rojas Medina	~> A00840712
 
 
 ## Project Structure
 
 ```bash
 .
-├── config                      
-│   ├── main.yaml                   # Main configuration file
-│   ├── model                       # Configurations for training model
-│   │   ├── model1.yaml             # First variation of parameters to train model
-│   │   └── model2.yaml             # Second variation of parameters to train model
-│   └── process                     # Configurations for processing data
-│       ├── process1.yaml           # First variation of parameters to process data
-│       └── process2.yaml           # Second variation of parameters to process data
-├── data            
-│   ├── final                       # data after training the model
-│   ├── processed                   # data after processing
-│   └── raw                         # raw data
-├── docs                            # documentation for your project
-├── .gitignore                      # ignore files that cannot commit to Git
-├── Makefile                        # store useful commands to set up the environment
-├── models                          # store models
-├── notebooks                       # store notebooks
-├── pyproject.toml                  # Configure black
-
-├── README.md                       # describe your project
-├── src                             # store source code
-│   ├── __init__.py                 # make src a Python module 
-│   ├── data_loader.py                  # process data before training model
-│   ├── train_model.py              # train model
-│   └── utils.py                    # store helper functions
-└── tests                           # store tests
-    ├── __init__.py                 # make tests a Python module 
-    ├── test_process.py             # test functions for data_loader.py
-    └── test_train_model.py         # test functions for train_model.py
+├── README.md
+├── data
+│   ├── final
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── model
+│   │   └── cc.en.300.bin
+│   ├── pre_processed
+│   │   └── pricerunner.csv
+│   ├── processed
+│   │   └── pricerunner.csv
+│   ├── raw
+│   │   ├── pricerunner_aggregate.csv
+│   │   └── pricerunner_aggregate.csv.dvc
+│   └── transformed
+│       ├── pricerunner_test_features.csv
+│       ├── pricerunner_test_target.csv
+│       ├── pricerunner_train_features.csv
+│       └── pricerunner_train_target.csv
+├── docs
+├── dvc.yaml
+├── refactoring
+│   ├── __init__.py
+│   └── v1
+│       ├── __init__.py
+│       ├── data_loader.py
+│       ├── pipelineObj.py
+│       ├── preproccesing.py
+│       ├── requirements.txt
+│       └── transformation.py
+├── requirements.txt
+└── src
+    ├── __init__.py
+    ├── data_loader.py
+    ├── embedder.py
+    ├── evaluator.py
+    ├── model.py
+    ├── model_downloader.py
+    ├── processor.py
+    ├── transformer.py
+    └── utils.py
 ```
 
 ## Set up the environment
@@ -46,23 +61,20 @@
 
 1. Create the virtual environment:
 ```bash
-python3 -m venv venv
+python3 -m venv mlops_env
 ```
 2. Activate the virtual environment:
 
 - For Linux/MacOS:
 ```bash
-source venv/bin/activate
+source mlops_env/bin/activate
 ```
 - For Command Prompt:
 ```bash
-.\venv\Scripts\activate
+.\mlops_env\Scripts\activate
 ```
 3. Install dependencies:
-- To install all dependencies, run:
-```bash
-pip install -r requirements-dev.txt
-```
+
 - To install only production dependencies, run:
 ```bash
 pip install -r requirements.txt
@@ -73,46 +85,26 @@ pip install <package-name>
 ```
 
 
-## View and alter configurations
-To view the configurations associated with a Pythons script, run the following command:
+## DVC
+
+1. Initialize dvc
 ```bash
-python src/data_loader.py --help
-```
-Output:
-```yaml
-process is powered by Hydra.
-
-== Configuration groups ==
-Compose your configuration from those groups (group=option)
-
-model: model1, model2
-process: process1, process2
-
-
-== Config ==
-Override anything in the config (foo.bar=value)
-
-process:
-  use_columns:
-  - col1
-  - col2
-model:
-  name: model1
-data:
-  raw: data/raw/sample.csv
-  processed: data/processed/processed.csv
-  final: data/final/final.csv
+dvc init
 ```
 
-To alter the configurations associated with a Python script from the command line, run the following:
-```bash
-python src/data_loader.py data.raw=sample2.csv
-```
-
-## Auto-generate API documentation
-
-To auto-generate API document for your project, run:
+2. Add the dataset to DVC tracking
 
 ```bash
-make docs
+dvc add pricerunner_aggregate.csv
 ```
+
+3. Create DVC pipeline
+
+```bash
+dvc stage add -n load_data \
+-d data/raw/pricerunner_aggregate.csv \
+-o data/pre_processed/pricerunner.csv \
+python src/data_loader.py data/raw/pricerunner_aggregate.csv data/pre_processed/pricerunner.csv
+```
+
+
