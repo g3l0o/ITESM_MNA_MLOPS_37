@@ -12,6 +12,7 @@ def load_standarize_data(filepath):
     new_df['category_id'] = new_df['category_id'].map(label_mapper)
     return new_df
 
+
 if __name__ == '__main__':
     data_path = sys.argv[1]
     output_file = sys.argv[2]
