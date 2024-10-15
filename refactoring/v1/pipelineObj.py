@@ -5,15 +5,23 @@ import matplotlib.pyplot as plt
 
 class Pipeline():
     def load_data(self,path):
-        self.df = data_loader.load_standarize_data(path)
+        self.df = data_loader.load_data(path)
     
     def preprocess_data(self):
-        self.df = preproccesing.preprocces(self.df)
+        return preproccesing.preprocces(self.df)
+        
 
-    def transform_data(self,split_percentage=0.20,random_state=2):
-        self.train_vocab, self.test_vocab,self.y_train,self.y_test = transformation.obtain_vocabs(self.df,split_percentage,random_state)
-        self.train_embedds = transformation.embedd_sentences(self.train_vocab,'train')
-        self.test_embedds = transformation.embedd_sentences(self.test_vocab,'test')
+    def transform_data(self,df,split_percentage=0.20,random_state=2):
+        train_vocab, test_vocab,y_train,y_test = transformation.obtain_vocabs(df,split_percentage,random_state)
+        train_embedds = transformation.embedd_sentences(train_vocab,'train')
+        test_embedds = transformation.embedd_sentences(test_vocab,'test')
+        return {'train_vocab':train_vocab,
+                'test_vocab':test_vocab,
+                'y_train':y_train,
+                'y_test':y_test,
+                'train_embedds':train_embedds,
+                'test_embedds':test_embedds}
+
 
     def EDA(self,vocab,classes):
         transformation.wordClouds(vocab,classes)
