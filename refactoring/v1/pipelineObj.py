@@ -1,4 +1,4 @@
-from v1 import preproccesing, transformation,data_loader
+import preproccesing, transformation,data_loader
 from sklearn.metrics import accuracy_score,confusion_matrix,ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
@@ -71,4 +71,5 @@ class Pipeline():
         pre_df = self.preprocess_data()
         transformed_data = self.transform_data(pre_df)
         self.train(modelo)
-        self.evalute_model()
+        tp,fp,fn,tn =  self.evalute_model()
+        return tp,fp,fn,tn
