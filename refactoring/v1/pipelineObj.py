@@ -21,11 +21,11 @@ class Pipeline():
         
 
     def transform_data(self,df,split_percentage=0.20,random_state=2):
-        train_vocab, test_vocab,self.y_train,self.y_test = transformation.obtain_vocabs(df,split_percentage,random_state)
-        self.train_embedds = transformation.embedd_sentences(train_vocab,'train')
-        self.test_embedds = transformation.embedd_sentences(test_vocab,'test')
-        return {'train_vocab':train_vocab,
-                'test_vocab':test_vocab,
+        self.train_vocab, self.test_vocab,self.y_train,self.y_test = transformation.obtain_vocabs(df,split_percentage,random_state)
+        self.train_embedds = transformation.embedd_sentences(self.train_vocab,'train')
+        self.test_embedds = transformation.embedd_sentences(self.test_vocab,'test')
+        return {'train_vocab':self.train_vocab,
+                'test_vocab':self.test_vocab,
                 'y_train':self.y_train,
                 'y_test':self.y_test,
                 'train_embedds':self.train_embedds,
