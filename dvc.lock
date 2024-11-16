@@ -92,8 +92,8 @@ stages:
       size: 176607953
     - path: mlops/stages/train.py
       hash: md5
-      md5: a46b86c9dd75cdd70285822ca981aeae
-      size: 2145
+      md5: 4bc3af415f4553434b52529673d5ce85
+      size: 2343
     params:
       config.yaml:
         train:
@@ -115,9 +115,10 @@ stages:
             r_forest:
               param_grid:
                 n_estimators:
-                - 100
+                - 99
                 random_state:
                 - 2
+          cm_path: reports/figures/cm.png
           model_path: models/model.joblib
         transform_data:
           test_size: 0.2
@@ -129,8 +130,12 @@ stages:
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: 43f41cb2dadfcc7ecb1f71a2751f7b76
-      size: 81589923
+      md5: fab883b5098aac2e3f8e671252028019
+      size: 80773427
+    - path: reports/figures/cm.png
+      hash: md5
+      md5: 98f7bad2dd76212b5b96a6a08d553fc4
+      size: 34102
   evaluate:
     cmd: python -m mlops.stages.evaluate --config config.yaml
     deps:
@@ -144,8 +149,8 @@ stages:
       size: 1050
     - path: models/model.joblib
       hash: md5
-      md5: 43f41cb2dadfcc7ecb1f71a2751f7b76
-      size: 81589923
+      md5: fab883b5098aac2e3f8e671252028019
+      size: 80773427
     params:
       config.yaml:
         evaluate:
@@ -169,9 +174,10 @@ stages:
             r_forest:
               param_grid:
                 n_estimators:
-                - 100
+                - 99
                 random_state:
                 - 2
+          cm_path: reports/figures/cm.png
           model_path: models/model.joblib
     outs:
     - path: reports/metrics/metrics.json

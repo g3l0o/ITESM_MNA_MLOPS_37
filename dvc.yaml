@@ -48,6 +48,7 @@ stages:
       - transform_data
     outs:
     - models/model.joblib
+    - reports/figures/cm.png
 
   evaluate:
     cmd: python -m mlops.stages.evaluate --config config.yaml

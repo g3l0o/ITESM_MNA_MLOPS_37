@@ -4,13 +4,14 @@ import argparse
 from sklearn.cluster import KMeans
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import f1_score,accuracy_score,recall_score,confusion_matrix
+from sklearn.metrics import f1_score,accuracy_score,recall_score,confusion_matrix,ConfusionMatrixDisplay
 import joblib
 from mlflow.models import infer_signature
 import mlflow.sklearn
 import mlflow
 import mlflow.models
 import numpy as np
+import matplotlib.pyplot as plt
 
 def obtain_estimators():
     return{
@@ -51,6 +52,15 @@ def train_model(config_path):
     accuracy = accuracy_score(y, predictions)
     recall = recall_score(y, predictions, average='weighted')
     f1 = f1_score(y, predictions, average='weighted')
+
+    ConfusionMatrixDisplay.from_estimator(
+        model,x,y)
+    plt.show
+    plt.savefig(config['train']['cm_path'])
+    plt.close()
+
+    
+
 
     mlflow.log_metric('accuracy', accuracy)
     mlflow.log_metric('recall', recall)
