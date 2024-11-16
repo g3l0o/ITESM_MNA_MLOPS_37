@@ -92,8 +92,8 @@ stages:
       size: 176607953
     - path: mlops/stages/train.py
       hash: md5
-      md5: 4bc3af415f4553434b52529673d5ce85
-      size: 2343
+      md5: cea0533c8b388d7f44ec5f337bdeac7a
+      size: 2495
     params:
       config.yaml:
         train:
@@ -120,6 +120,7 @@ stages:
                 - 2
           cm_path: reports/figures/cm.png
           model_path: models/model.joblib
+          model_pick: models/model.pkl
         transform_data:
           test_size: 0.2
           embedd_model_dir: cc.en.300.bin
@@ -130,8 +131,12 @@ stages:
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: fab883b5098aac2e3f8e671252028019
+      md5: 510fefc8a3bd84098cd72b111fc8c96b
       size: 80773427
+    - path: models/model.pkl
+      hash: md5
+      md5: 3cc3a866422eab614b9ddd9952e9ee2a
+      size: 80765481
     - path: reports/figures/cm.png
       hash: md5
       md5: 98f7bad2dd76212b5b96a6a08d553fc4
@@ -149,7 +154,7 @@ stages:
       size: 1423
     - path: models/model.joblib
       hash: md5
-      md5: fab883b5098aac2e3f8e671252028019
+      md5: 510fefc8a3bd84098cd72b111fc8c96b
       size: 80773427
     params:
       config.yaml:
@@ -180,6 +185,7 @@ stages:
                 - 2
           cm_path: reports/figures/cm.png
           model_path: models/model.joblib
+          model_pick: models/model.pkl
     outs:
     - path: reports/figures/cm_test.png
       hash: md5

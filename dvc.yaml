@@ -9,6 +9,7 @@ stages:
       - load_data
     outs:
     - data/interim/intern.csv
+    - data/interim/labels.csv
 
   preprocess_data:
     cmd: python -m mlops.stages.preprocess_data --config config.yaml
@@ -49,6 +50,7 @@ stages:
     outs:
     - models/model.joblib
     - reports/figures/cm.png
+    - models/model.pkl
 
   evaluate:
     cmd: python -m mlops.stages.evaluate --config config.yaml

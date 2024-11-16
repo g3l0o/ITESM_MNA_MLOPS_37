@@ -3,6 +3,7 @@ base:
 load_data:
     raw: 'data/raw/pricerunner_aggregate.csv'
     loaded_data_dir: 'data/interim/intern.csv'
+    mapped_labels: 'data/interim/labels.csv'
 preprocess_data:
     processed_data_dir: 'data/processed/processed.csv'
 transform_data:
@@ -28,6 +29,7 @@ train:
                 random_state: [2]
     cm_path: 'reports/figures/cm.png'
     model_path: models/model.joblib
+    model_pick: models/model.pkl
 
 evaluate:
     metrics_dir: 'reports/metrics/metrics.json'

@@ -12,6 +12,7 @@ import mlflow
 import mlflow.models
 import numpy as np
 import matplotlib.pyplot as plt
+import pickle
 
 def obtain_estimators():
     return{
@@ -68,7 +69,11 @@ def train_model(config_path):
 
 
     models_path = config['train']['model_path']
+    model_pickle = config['train']['model_pick']
     joblib.dump(model, models_path)
+
+    with open(model_pickle, 'wb') as model_file:
+        pickle.dump(model, model_file)
     model_info = mlflow.sklearn.log_model(model, artifact_path=f"r_forest")
 if __name__ == '__main__':
     args_parser = argparse.ArgumentParser()
