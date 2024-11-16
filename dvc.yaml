@@ -62,5 +62,6 @@ stages:
       - train
     outs:
     - reports/metrics/metrics.json
+    - reports/figures/cm_test.png
 
   

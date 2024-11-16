@@ -62,6 +62,7 @@ def transform_data(config_path):
             
         else:
             file_name = config['transform_data']['test_embedds_dir']
+            df = pd.DataFrame(embedded_sentences)
             df = pd.concat([df,pd.Series(y_test)],axis=1)
 
         df.to_csv(file_name,index=False)

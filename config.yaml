@@ -31,6 +31,7 @@ train:
 
 evaluate:
     metrics_dir: 'reports/metrics/metrics.json'
+    cm_path: 'reports/figures/cm_test.png'
 
 server:
     url: 'http://localhost:5001'
