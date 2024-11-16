@@ -1,59 +1,65 @@
 stages:
   load_data:
-    cmd: python src/data_loader.py data/raw/pricerunner_aggregate.csv data/pre_processed/p
+    cmd: python -m mlops.stages.load_data --config config.yaml
     deps:
+    - mlops/stages/load_data.py
     - data/raw/pricerunner_aggregate.csv
+    params:
+    - config.yaml:
+      - load_data
     outs:
-    - data/pre_processed/pricerunner.csv
-  preprocess:
-    cmd: python src/processor.py data/pre_processed/pricerunner.csv data/processed/pricerunner.csv
+    - data/interim/intern.csv
+
+  preprocess_data:
+    cmd: python -m mlops.stages.preprocess_data --config config.yaml
     deps:
-    - data/pre_processed/pricerunner.csv
+    - mlops/stages/preprocess_data.py
+    - data/interim/intern.csv
+    params:
+    - config.yaml:
+      - preprocess_data
+      - load_data
     outs:
-    - data/processed/pricerunner.csv
-  transform:
-    cmd: python src/transformer.py data/processed/pricerunner.csv data/transformed/pricerunner_train_features.csv
-      data/transformed/pricerunner_test_features.csv data/transformed/pricerunner_train_target.csv
-      data/transformed/pricerunner_test_target.csv
+    - data/processed/processed.csv
+
+  transform_data:
+    cmd: python -m mlops.stages.transform_data --config config.yaml
     deps:
-    - data/processed/pricerunner.csv
+    - mlops/stages/transform_data.py
+    - data/processed/processed.csv
+    params:
+    - config.yaml:
+      - transform_data
+      - preprocess_data
     outs:
-    - data/transformed/pricerunner_test_features.csv
-    - data/transformed/pricerunner_test_target.csv
-    - data/transformed/pricerunner_train_features.csv
-    - data/transformed/pricerunner_train_target.csv
-  download_model:
-    cmd: python src/model_downloader.py && mv src/cc.en.300.bin data/model/cc.en.300.bin
-      && rm src/cc.en.300.bin & rm src/cc.en.300.bin.gz
-    outs:
-    - data/model/cc.en.300.bin
-  embedder_train:
-    cmd: python src/embedder.py data/transformed/pricerunner_train_features.csv data/final/train.csv
-      data/model/cc.en.300.bin
+    - data/transformed/test_vocab.csv
+    - data/transformed/test.csv
+    - data/transformed/train_vocab.csv
+    - data/transformed/train.csv
+
+  train:
+    cmd: python -m mlops.stages.train --config config.yaml
     deps:
-    - data/model/cc.en.300.bin
-    - data/transformed/pricerunner_train_features.csv
+    - mlops/stages/train.py
+    - data/transformed/train.csv
+    params:
+    - config.yaml:
+      - train
+      - transform_data
     outs:
-    - data/final/train.csv
-  embedder_test:
-    cmd: python src/embedder.py data/transformed/pricerunner_train_features.csv data/final/train.csv
-      data/model/cc.en.300.bin
+    - models/model.joblib
+
+  evaluate:
+    cmd: python -m mlops.stages.evaluate --config config.yaml
     deps:
-    - data/model/cc.en.300.bin
-    - data/transformed/pricerunner_test_features.csv
+    - mlops/stages/evaluate.py
+    - data/transformed/test.csv
+    - models/model.joblib
+    params:
+    - config.yaml:
+      - evaluate
+      - train
     outs:
-    - data/final/test.csv
-  train_model:
-    cmd: python src/model.py data/final/train.csv data/transformed/pricerunner_train_target.csv
-      data/final/model.pkl
-    deps:
-    - data/final/train.csv
-    - data/transformed/pricerunner_train_target.csv
-    outs:
-    - data/final/model.pkl
-  evaluate_model:
-    cmd: python src/evaluator.py data/final/model.pkl data/final/test.csv data/transformed/pricerunner_test_target.csv
-    deps:
-    - data/final/model.pkl
-    - data/final/test.csv
-    - data/transformed/pricerunner_test_target.csv
+    - reports/metrics/metrics.json
+
+  

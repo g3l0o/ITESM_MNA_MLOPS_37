@@ -1,0 +1,36 @@
+base:
+    random_state: 2
+load_data:
+    raw: 'data/raw/pricerunner_aggregate.csv'
+    loaded_data_dir: 'data/interim/intern.csv'
+preprocess_data:
+    processed_data_dir: 'data/processed/processed.csv'
+transform_data:
+    test_size: 0.2
+    embedd_model_dir: 'cc.en.300.bin'
+    train_embedds_dir: 'data/transformed/train.csv'
+    test_embedds_dir: 'data/transformed/test.csv' 
+    train_vocab_dir: 'data/transformed/train_vocab.csv' 
+    test_vocab_dir: 'data/transformed/test_vocab.csv' 
+        
+train:
+    cv: 3
+    estimator_name: 'r_forest'
+    estimators:
+        k_means: 
+            param_grid: 
+                n_clusters: [7,8,9,10]
+                max_iter: [100]
+                algorithm: ['elkan', 'lloyd']
+        r_forest:
+            param_grid:
+                n_estimators: [100]
+                random_state: [2]
+    model_path: models/model.joblib
+
+evaluate:
+    metrics_dir: 'reports/metrics/metrics.json'
+
+server:
+    url: 'http://localhost:5001'
+    experiment_name: 'Grouping titles'

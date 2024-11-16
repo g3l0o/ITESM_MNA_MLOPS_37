@@ -1,110 +1,61 @@
-# ITESM_MNA_MLOPS_37
+# Mlops
 
-## Miembros del equipo
-* Carlos Mariano Ramírez Amaya 	~> A01795036
-* Rogelio Rivera Meléndez	~> A01166618
-* Felipe Enrique Vázquez Ruiz	~> A01638116
-* Andrea Fernanda Molina Blandón	~> A00827133
-* Jorge Olavarrieta de la Torre	~> A01795487
-* Edgar Gerardo Rojas Medina	~> A00840712
+<a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
+    <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
+</a>
 
+A short description of the project.
 
-## Project Structure
+## Project Organization
 
-```bash
-.
-├── README.md
+```
+├── LICENSE            <- Open-source license if one is chosen
+├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
+├── README.md          <- The top-level README for developers using this project.
 ├── data
-│   ├── final
-│   │   ├── test.csv
-│   │   └── train.csv
-│   ├── model
-│   │   └── cc.en.300.bin
-│   ├── pre_processed
-│   │   └── pricerunner.csv
-│   ├── processed
-│   │   └── pricerunner.csv
-│   ├── raw
-│   │   ├── pricerunner_aggregate.csv
-│   │   └── pricerunner_aggregate.csv.dvc
-│   └── transformed
-│       ├── pricerunner_test_features.csv
-│       ├── pricerunner_test_target.csv
-│       ├── pricerunner_train_features.csv
-│       └── pricerunner_train_target.csv
-├── docs
-├── dvc.yaml
-├── refactoring
-│   ├── __init__.py
-│   └── v1
-│       ├── __init__.py
-│       ├── data_loader.py
-│       ├── pipelineObj.py
-│       ├── preproccesing.py
-│       ├── requirements.txt
-│       └── transformation.py
-├── requirements.txt
-└── src
-    ├── __init__.py
-    ├── data_loader.py
-    ├── embedder.py
-    ├── evaluator.py
-    ├── model.py
-    ├── model_downloader.py
-    ├── processor.py
-    ├── transformer.py
-    └── utils.py
+│   ├── external       <- Data from third party sources.
+│   ├── interim        <- Intermediate data that has been transformed.
+│   ├── processed      <- The final, canonical data sets for modeling.
+│   └── raw            <- The original, immutable data dump.
+│
+├── docs               <- A default mkdocs project; see www.mkdocs.org for details
+│
+├── models             <- Trained and serialized models, model predictions, or model summaries
+│
+├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
+│                         the creator's initials, and a short `-` delimited description, e.g.
+│                         `1.0-jqp-initial-data-exploration`.
+│
+├── pyproject.toml     <- Project configuration file with package metadata for 
+│                         mlops and configuration for tools like black
+│
+├── references         <- Data dictionaries, manuals, and all other explanatory materials.
+│
+├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
+│   └── figures        <- Generated graphics and figures to be used in reporting
+│
+├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
+│                         generated with `pip freeze > requirements.txt`
+│
+├── setup.cfg          <- Configuration file for flake8
+│
+└── mlops   <- Source code for use in this project.
+    │
+    ├── __init__.py             <- Makes mlops a Python module
+    │
+    ├── config.py               <- Store useful variables and configuration
+    │
+    ├── dataset.py              <- Scripts to download or generate data
+    │
+    ├── features.py             <- Code to create features for modeling
+    │
+    ├── modeling                
+    │   ├── __init__.py 
+    │   ├── predict.py          <- Code to run model inference with trained models          
+    │   └── train.py            <- Code to train models
+    │
+    └── plots.py                <- Code to create visualizations
 ```
 
-## Set up the environment
-
-
-1. Create the virtual environment:
-```bash
-python3 -m venv mlops_env
-```
-2. Activate the virtual environment:
-
-- For Linux/MacOS:
-```bash
-source mlops_env/bin/activate
-```
-- For Command Prompt:
-```bash
-.\mlops_env\Scripts\activate
-```
-3. Install dependencies:
-
-- To install only production dependencies, run:
-```bash
-pip install -r requirements.txt
-```
-- To install a new package, run:
-```bash
-pip install <package-name>
-```
-
-
-## DVC
-
-1. Initialize dvc
-```bash
-dvc init
-```
-
-2. Add the dataset to DVC tracking
-
-```bash
-dvc add pricerunner_aggregate.csv
-```
-
-3. Create DVC pipeline
-
-```bash
-dvc stage add -n load_data \
--d data/raw/pricerunner_aggregate.csv \
--o data/pre_processed/pricerunner.csv \
-python src/data_loader.py data/raw/pricerunner_aggregate.csv data/pre_processed/pricerunner.csv
-```
-
+--------
 

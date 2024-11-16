@@ -1,0 +1,180 @@
+schema: '2.0'
+stages:
+  load_data:
+    cmd: python -m mlops.stages.load_data --config config.yaml
+    deps:
+    - path: data/raw/pricerunner_aggregate.csv
+      hash: md5
+      md5: 4088854698db833359fe8a4a637727d4
+      size: 3919561
+    - path: mlops/stages/load_data.py
+      hash: md5
+      md5: 57e88310a66e1dd442514f3f31477297
+      size: 726
+    params:
+      config.yaml:
+        load_data:
+          raw: data/raw/pricerunner_aggregate.csv
+          loaded_data_dir: data/interim/intern.csv
+    outs:
+    - path: data/interim/intern.csv
+      hash: md5
+      md5: 61807047116e4ce294070880080d3d7d
+      size: 3813629
+  preprocess_data:
+    cmd: python -m mlops.stages.preprocess_data --config config.yaml
+    deps:
+    - path: data/interim/intern.csv
+      hash: md5
+      md5: 61807047116e4ce294070880080d3d7d
+      size: 3813629
+    - path: mlops/stages/preprocess_data.py
+      hash: md5
+      md5: 545b5ca96bee0ec4ce247882d379aa30
+      size: 1294
+    params:
+      config.yaml:
+        load_data:
+          raw: data/raw/pricerunner_aggregate.csv
+          loaded_data_dir: data/interim/intern.csv
+        preprocess_data:
+          processed_data_dir: data/processed/processed.csv
+    outs:
+    - path: data/processed/processed.csv
+      hash: md5
+      md5: 22c0e5337d41074d8639b2aafbbf7604
+      size: 2893995
+  transform_data:
+    cmd: python -m mlops.stages.transform_data --config config.yaml
+    deps:
+    - path: data/processed/processed.csv
+      hash: md5
+      md5: 22c0e5337d41074d8639b2aafbbf7604
+      size: 2893995
+    - path: mlops/stages/transform_data.py
+      hash: md5
+      md5: 5af7ea2918ba5b4e95f52fee6ce2d9e1
+      size: 2567
+    params:
+      config.yaml:
+        preprocess_data:
+          processed_data_dir: data/processed/processed.csv
+        transform_data:
+          test_size: 0.2
+          embedd_model_dir: cc.en.300.bin
+          train_embedds_dir: data/transformed/train.csv
+          test_embedds_dir: data/transformed/test.csv
+          train_vocab_dir: data/transformed/train_vocab.csv
+          test_vocab_dir: data/transformed/test_vocab.csv
+    outs:
+    - path: data/transformed/test.csv
+      hash: md5
+      md5: 1fdc9d6b5fb6446bfba8287ee3fa07bd
+      size: 176657392
+    - path: data/transformed/test_vocab.csv
+      hash: md5
+      md5: 9b1edde9d7117c3c5c87300b62376b43
+      size: 463952
+    - path: data/transformed/train.csv
+      hash: md5
+      md5: c12dfea00a1c6f7529b9cfb6ab31db16
+      size: 176607953
+    - path: data/transformed/train_vocab.csv
+      hash: md5
+      md5: 12914b06e3126e91c5eff30ec97ce84f
+      size: 1891920
+  train:
+    cmd: python -m mlops.stages.train --config config.yaml
+    deps:
+    - path: data/transformed/train.csv
+      hash: md5
+      md5: c12dfea00a1c6f7529b9cfb6ab31db16
+      size: 176607953
+    - path: mlops/stages/train.py
+      hash: md5
+      md5: a46b86c9dd75cdd70285822ca981aeae
+      size: 2145
+    params:
+      config.yaml:
+        train:
+          cv: 3
+          estimator_name: r_forest
+          estimators:
+            k_means:
+              param_grid:
+                n_clusters:
+                - 7
+                - 8
+                - 9
+                - 10
+                max_iter:
+                - 100
+                algorithm:
+                - elkan
+                - lloyd
+            r_forest:
+              param_grid:
+                n_estimators:
+                - 100
+                random_state:
+                - 2
+          model_path: models/model.joblib
+        transform_data:
+          test_size: 0.2
+          embedd_model_dir: cc.en.300.bin
+          train_embedds_dir: data/transformed/train.csv
+          test_embedds_dir: data/transformed/test.csv
+          train_vocab_dir: data/transformed/train_vocab.csv
+          test_vocab_dir: data/transformed/test_vocab.csv
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: 43f41cb2dadfcc7ecb1f71a2751f7b76
+      size: 81589923
+  evaluate:
+    cmd: python -m mlops.stages.evaluate --config config.yaml
+    deps:
+    - path: data/transformed/test.csv
+      hash: md5
+      md5: 1fdc9d6b5fb6446bfba8287ee3fa07bd
+      size: 176657392
+    - path: mlops/stages/evaluate.py
+      hash: md5
+      md5: c81e2037bb3b34b1fc40ceac4de8ca34
+      size: 1050
+    - path: models/model.joblib
+      hash: md5
+      md5: 43f41cb2dadfcc7ecb1f71a2751f7b76
+      size: 81589923
+    params:
+      config.yaml:
+        evaluate:
+          metrics_dir: reports/metrics/metrics.json
+        train:
+          cv: 3
+          estimator_name: r_forest
+          estimators:
+            k_means:
+              param_grid:
+                n_clusters:
+                - 7
+                - 8
+                - 9
+                - 10
+                max_iter:
+                - 100
+                algorithm:
+                - elkan
+                - lloyd
+            r_forest:
+              param_grid:
+                n_estimators:
+                - 100
+                random_state:
+                - 2
+          model_path: models/model.joblib
+    outs:
+    - path: reports/metrics/metrics.json
+      hash: md5
+      md5: e00e4f033fe27f1e7383007bcd039c60
+      size: 94
